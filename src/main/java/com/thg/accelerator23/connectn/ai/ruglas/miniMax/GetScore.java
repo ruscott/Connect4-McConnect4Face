@@ -26,28 +26,22 @@ public class GetScore {
         }
     }
 
-    public int getOpponentScore(Position positionToCheck, Counter counter) throws InvalidMoveException {
-        return getScoreFromAdjPositions(positionToCheck, counter, true);
+    public int getOpponentScore(Position positionToCheck, Counter counter, Board boardGame) throws InvalidMoveException {
+        return getScoreFromAdjPositions(positionToCheck, boardGame, counter, true);
     }
 
-    public int getTotalScore(Position positionToCheck, Counter counter) throws InvalidMoveException {
-        GameState gameState = boardAnalyser.calculateGameState(this.board);
+    public int getTotalScore(Position positionToCheck, Counter counter, Board boardGame) throws InvalidMoveException {
         totalScore = 0;
-//        if(gameState.isDraw()){return 0;} else if (gameState.isWin()) { return 1000000;
-//
-//        }
-//        else{
-            totalScore += getScoreFromAdjPositions(positionToCheck, counter, false);
+            totalScore += getScoreFromAdjPositions(positionToCheck, boardGame, counter, false);
             if (positionToCheck.getX() == 4 || positionToCheck.getX() == 5){
                 totalScore += 15;
-                System.out.println("Central column");
+//                System.out.println("Central column");
             }
             else if (positionToCheck.getX() == 3 || positionToCheck.getX() == 6){
                 totalScore += 10;
-                System.out.println("near-central column");
+//                System.out.println("near-central column");
             }
             return totalScore;
-//        }
     }
 
     public ArrayList<ArrayList<Position>> getAdjacentNPositions(Position position, int n) {
@@ -91,16 +85,16 @@ public class GetScore {
         return positions;
     }
 
-    public int getScoreFromAdjPositions(Position positionToPlay, Counter counter, boolean isOpponent) throws InvalidMoveException {
+    public int getScoreFromAdjPositions(Position positionToPlay, Board boardGame, Counter counter, boolean isOpponent) throws InvalidMoveException {
         ArrayList<ArrayList<Position>> positionsArray = getAdjacentNPositions(positionToPlay, 4);
         int score = 0;
         for (ArrayList<Position> positions : positionsArray) {
             for (int positionIndex = 0; positionIndex<positions.size()-4; positionIndex++) {
                 List<Counter> counterList = new ArrayList<>();
-                if(this.board.getCounterAtPosition(positions.get(positionIndex)) == counter.getOther()){}
+                if(boardGame.getCounterAtPosition(positions.get(positionIndex)) == counter.getOther()){}
                 else {
                     for (int counterIndex = 0; counterIndex < 4; counterIndex++) {
-                        counterList.add(this.board.getCounterAtPosition(positions.get(positionIndex + counterIndex)));
+                        counterList.add(boardGame.getCounterAtPosition(positions.get(positionIndex + counterIndex)));
                     }
                     if (!isOpponent){
                     score += findScore(counterList, counter);}
@@ -113,11 +107,11 @@ public class GetScore {
     }
 
     private int findScore(List<Counter> counterList, Counter playerCounter) {
-        if(counterList.stream().filter(counter -> counter== playerCounter.getOther()).count() > 0) {return 0;}
+        if(counterList.stream().filter(counter -> counter == playerCounter.getOther()).count() > 0) {return 0;}
         else{
             long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
             if(counterCount == 2){return 20;}
-            else if(counterCount == 3) {return 40;}
+            else if(counterCount == 3) {return 500;}
             else return 5;
         }}
 
@@ -126,7 +120,7 @@ public class GetScore {
             else{
                 long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
                 if(counterCount == 2){return 5;}
-                else if(counterCount == 3) {return 50;}
+                else if(counterCount == 3) {return 10;}
                 else return 0;
             }
         }

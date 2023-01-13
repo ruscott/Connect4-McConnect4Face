@@ -54,11 +54,11 @@ public class ChooseMove {
                 Position positionToPlay = new Position(i,getMinY(i, this.board));
                 if (this.board.isWithinBoard(positionToPlay)) {
                     GetScore getScore = new GetScore(this.board, this.counter);
-                    int positionScore = getScore.getTotalScore(positionToPlay, this.counter);
+                    int positionScore = getScore.getTotalScore(positionToPlay, this.counter, this.board);
                     if (positionScore > bestScore) {
                         bestScore = positionScore;
                         bestColumn = i;
-                        System.out.println("The best move is in column " + i + " which scores " + bestScore + " points");
+//                        System.out.println("The best move is in column " + i + " which scores " + bestScore + " points");
                     }
                 }
             }

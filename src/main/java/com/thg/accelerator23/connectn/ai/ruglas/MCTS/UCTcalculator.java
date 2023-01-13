@@ -18,6 +18,6 @@ public class UCTcalculator {
         return Collections.max(
                 node.getChildren(),
                 Comparator.comparing(c -> uctValue(parentVisit,
-                        c.score, c.getVisitCount())));
+                        c.getNodeWins(), c.getVisitCount())));
     }
 }
