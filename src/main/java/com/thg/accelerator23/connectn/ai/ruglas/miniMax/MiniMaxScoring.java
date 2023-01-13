@@ -9,12 +9,9 @@ import com.thg.accelerator23.connectn.ai.ruglas.analysis.GameState;
 
 public class MiniMaxScoring {
     Counter counter;
-
     Counter oppositionCounter;
     int score;
-
     int bestColumn;
-
     int bestScore;
 
     public MiniMaxScoring(Counter counter) {
@@ -24,7 +21,7 @@ public class MiniMaxScoring {
    public int miniMaxMove(Board boardPlay, boolean isMax, int depth, int column) throws InvalidMoveException {
 //       System.out.println("depth " + depth + " column " + column + " score "  + score);
 
-        GetScore getScore = new GetScore(boardPlay, counter);
+        GetScore getScore = new GetScore(boardPlay, this.counter);
         BoardAnalyser boardAnalyser = new BoardAnalyser(boardPlay.getConfig());
         GameState gameState = boardAnalyser.calculateGameState(boardPlay);
 
@@ -35,8 +32,8 @@ public class MiniMaxScoring {
             else if (gameState.isDraw()){
                 return 0;
             }
-            else return (getScore.getTotalScore(new Position(column, getMinY(column, boardPlay)), boardPlay, counter)
-                        -(getScore.getOpponentScore(new Position(column, getMinY(column, boardPlay)), boardPlay, oppositionCounter)));}
+            else return (getScore.getTotalScore(new Position(column, getMinY(column, boardPlay)), counter)
+                        -(getScore.getOpponentScore(new Position(column, getMinY(column, boardPlay)), oppositionCounter)));}
         else if (isMax) {
             bestScore = -1000000;
             for (int xMax=0; xMax<boardPlay.getConfig().getWidth(); xMax++) {

@@ -26,23 +26,30 @@ public class GetScore {
         }
     }
 
-    public int getOpponentScore(Position positionToCheck, Board boardToCheck, Counter counter) throws InvalidMoveException {
-        return getScoreFromAdjPositions(positionToCheck, boardToCheck, counter, true);
+    public int getOpponentScore(Position positionToCheck, Counter counter) throws InvalidMoveException {
+        return getScoreFromAdjPositions(positionToCheck, counter, true);
     }
 
-    public int getTotalScore(Position positionToCheck, Board boardToCheck, Counter counter) throws InvalidMoveException {
-        GameState gameState = boardAnalyser.calculateGameState(boardToCheck);
+    public int getTotalScore(Position positionToCheck, Counter counter) throws InvalidMoveException {
+        GameState gameState = boardAnalyser.calculateGameState(this.board);
         totalScore = 0;
-            totalScore += getScoreFromAdjPositions(positionToCheck, boardToCheck, counter, false);
+//        if(gameState.isDraw()){return 0;} else if (gameState.isWin()) { return 1000000;
+//
+//        }
+//        else{
+            totalScore += getScoreFromAdjPositions(positionToCheck, counter, false);
             if (positionToCheck.getX() == 4 || positionToCheck.getX() == 5){
-                totalScore += 50;
+                totalScore += 15;
+                System.out.println("Central column");
             }
             else if (positionToCheck.getX() == 3 || positionToCheck.getX() == 6){
-                totalScore += 40;
+                totalScore += 10;
+                System.out.println("near-central column");
             }
             return totalScore;
-
+//        }
     }
+
     public ArrayList<ArrayList<Position>> getAdjacentNPositions(Position position, int n) {
         ArrayList<ArrayList<Position>> positions = new ArrayList<>();
 
@@ -84,16 +91,16 @@ public class GetScore {
         return positions;
     }
 
-    public int getScoreFromAdjPositions(Position positionToPlay, Board board, Counter counter, boolean isOpponent) throws InvalidMoveException {
+    public int getScoreFromAdjPositions(Position positionToPlay, Counter counter, boolean isOpponent) throws InvalidMoveException {
         ArrayList<ArrayList<Position>> positionsArray = getAdjacentNPositions(positionToPlay, 4);
         int score = 0;
         for (ArrayList<Position> positions : positionsArray) {
             for (int positionIndex = 0; positionIndex<positions.size()-4; positionIndex++) {
                 List<Counter> counterList = new ArrayList<>();
-                if(board.getCounterAtPosition(positions.get(positionIndex)) == counter.getOther()){}
+                if(this.board.getCounterAtPosition(positions.get(positionIndex)) == counter.getOther()){}
                 else {
                     for (int counterIndex = 0; counterIndex < 4; counterIndex++) {
-                        counterList.add(board.getCounterAtPosition(positions.get(positionIndex + counterIndex)));
+                        counterList.add(this.board.getCounterAtPosition(positions.get(positionIndex + counterIndex)));
                     }
                     if (!isOpponent){
                     score += findScore(counterList, counter);}
@@ -109,8 +116,8 @@ public class GetScore {
         if(counterList.stream().filter(counter -> counter== playerCounter.getOther()).count() > 0) {return 0;}
         else{
             long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
-            if(counterCount == 2){return 10;}
-            else if(counterCount == 3) {return 20;}
+            if(counterCount == 2){return 20;}
+            else if(counterCount == 3) {return 40;}
             else return 5;
         }}
 
@@ -119,31 +126,31 @@ public class GetScore {
             else{
                 long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
                 if(counterCount == 2){return 5;}
-                else if(counterCount == 3) {return 10;}
+                else if(counterCount == 3) {return 50;}
                 else return 0;
             }
         }
-   public int getHeightOfWinPositionFromLine(Board board, List<Position> positionList) {
+   public int getHeightOfWinPositionFromLine(List<Position> positionList) {
        System.out.println("getHeightOfWinPosition method call");
 
        int height = 100;
 
        for (Position position : positionList) {
-           System.out.println(board.getCounterAtPosition(position));
+           System.out.println(this.board.getCounterAtPosition(position));
 
-           if (board.getCounterAtPosition(position) == null) {
+           if (this.board.getCounterAtPosition(position) == null) {
                height = position.getY();
            }
        }
        return height;
    }
 
-   public int getHeightScore(Board board, List<Position> positionList) {
+   public int getHeightScore(List<Position> positionList) {
 
        int score = 0;
        System.out.println("getHeightScore method call");
 
-           int winPositionHeight = getHeightOfWinPositionFromLine(board, positionList);
+           int winPositionHeight = getHeightOfWinPositionFromLine(positionList);
 
            score = score + 40 - winPositionHeight * 5;
 

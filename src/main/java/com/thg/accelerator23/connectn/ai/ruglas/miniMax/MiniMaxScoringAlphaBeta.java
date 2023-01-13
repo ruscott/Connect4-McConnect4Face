@@ -24,19 +24,19 @@ public class MiniMaxScoringAlphaBeta {
    public int miniMaxMoveAlphaBeta(Board boardPlay, boolean isMax, int depth, int column, int alpha, int beta) throws InvalidMoveException {
 //       System.out.println("depth " + depth + " column " + column + " score "  + score);
 
-       GetScore getScore = new GetScore(boardPlay, counter);
+       GetScore getScore = new GetScore(boardPlay, this.counter);
        BoardAnalyser boardAnalyser = new BoardAnalyser(boardPlay.getConfig());
        GameState gameState = boardAnalyser.calculateGameState(boardPlay);
 
        if (depth == 0 || gameState.isEnd()) {
            if (gameState.isWin()){
-               if (gameState.getWinner() == counter){return 10000000;}
-               else{return -10000000;}}
+           if (gameState.getWinner() == counter){return 10000000;}
+           else{return -10000000;}}
            else if (gameState.isDraw()){
-           return -1000000;
+           return 0;
            }
-           else return (getScore.getTotalScore(new Position(column, getMinY(column, boardPlay)), boardPlay, counter)
-                       -(getScore.getOpponentScore(new Position(column, getMinY(column, boardPlay)), boardPlay, oppositionCounter)));}
+           else return (getScore.getTotalScore(new Position(column, getMinY(column, boardPlay)), counter)
+                       -(getScore.getOpponentScore(new Position(column, getMinY(column, boardPlay)), oppositionCounter)));}
        else if (isMax) {
              bestScore = -1000000;
             for (int xMax=0; xMax<boardPlay.getConfig().getWidth(); xMax++) {
@@ -47,7 +47,7 @@ public class MiniMaxScoringAlphaBeta {
 
                     if (score > bestScore) {
                     bestScore = score;
-                    this.bestColumn = checkPosition.getX();
+                    this.bestColumn = xMax;
 //                        System.out.println("bestcolumn " + xMax);
                 }
 
@@ -69,7 +69,7 @@ public class MiniMaxScoringAlphaBeta {
                score = miniMaxMoveAlphaBeta(tempBoard, true, depth - 1, xMin, alpha, beta);
 
                if (score<bestScore){
-                   this.bestColumn = checkPosition.getX();
+                   this.bestColumn = xMin;
                bestScore = score;
 //                   System.out.println("bestcolumn " + xMin);
                }
