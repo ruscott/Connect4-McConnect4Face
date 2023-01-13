@@ -33,19 +33,14 @@ public class GetScore {
     public int getTotalScore(Position positionToCheck, Board boardToCheck, Counter counter) throws InvalidMoveException {
         GameState gameState = boardAnalyser.calculateGameState(boardToCheck);
         totalScore = 0;
-//        if(gameState.isDraw()){return 0;} else if (gameState.isWin()) { return 1000000;
-//
-//        }
-//        else{
             totalScore += getScoreFromAdjPositions(positionToCheck, boardToCheck, counter, false);
             if (positionToCheck.getX() == 4 || positionToCheck.getX() == 5){
-                totalScore += 15;
+                totalScore += 50;
             }
             else if (positionToCheck.getX() == 3 || positionToCheck.getX() == 6){
-                totalScore += 10;
+                totalScore += 40;
             }
             return totalScore;
-//        }
 
     }
     public ArrayList<ArrayList<Position>> getAdjacentNPositions(Position position, int n) {
@@ -114,8 +109,8 @@ public class GetScore {
         if(counterList.stream().filter(counter -> counter== playerCounter.getOther()).count() > 0) {return 0;}
         else{
             long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
-            if(counterCount == 2){return 20;}
-            else if(counterCount == 3) {return 40;}
+            if(counterCount == 2){return 10;}
+            else if(counterCount == 3) {return 20;}
             else return 5;
         }}
 
@@ -124,7 +119,7 @@ public class GetScore {
             else{
                 long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
                 if(counterCount == 2){return 5;}
-                else if(counterCount == 3) {return 50;}
+                else if(counterCount == 3) {return 10;}
                 else return 0;
             }
         }

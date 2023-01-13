@@ -24,7 +24,7 @@ public class MiniMaxScoring {
    public int miniMaxMove(Board boardPlay, boolean isMax, int depth, int column) throws InvalidMoveException {
 //       System.out.println("depth " + depth + " column " + column + " score "  + score);
 
-        GetScore getScore = new GetScore(boardPlay);
+        GetScore getScore = new GetScore(boardPlay, counter);
         BoardAnalyser boardAnalyser = new BoardAnalyser(boardPlay.getConfig());
         GameState gameState = boardAnalyser.calculateGameState(boardPlay);
 

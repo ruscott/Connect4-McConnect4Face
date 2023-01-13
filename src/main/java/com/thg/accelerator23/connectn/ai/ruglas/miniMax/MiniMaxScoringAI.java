@@ -14,7 +14,7 @@ public class MiniMaxScoringAI extends Player {
     public int makeMove(Board board) {
         MiniMaxScoring miniMaxScoring = new MiniMaxScoring(this.getCounter());
         try {
-            miniMaxScoring.miniMaxMove(board, true, 4, 0);
+            miniMaxScoring.miniMaxMove(board, true, 5, 0);
             return miniMaxScoring.getBestColumn();
 
         } catch (InvalidMoveException e) {
