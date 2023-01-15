@@ -12,6 +12,7 @@ public class MiniMaxScoringAI extends Player {
 
     @Override
     public int makeMove(Board board) {
+
         MiniMaxScoring miniMaxScoring = new MiniMaxScoring(this.getCounter());
         try {
             miniMaxScoring.miniMaxMove(board, true, 5, 0);

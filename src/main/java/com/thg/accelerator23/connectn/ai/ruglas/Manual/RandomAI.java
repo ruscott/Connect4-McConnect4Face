@@ -35,13 +35,26 @@ public class RandomAI extends Player {
         int result;
         Position positionToPlay;
 
-        do {
-            result = moveChooser.getPlayLocation();
-            positionToPlay = new Position(result, getMinY(result, board));
-        } while (!board.isWithinBoard(positionToPlay));
+
+        result = moveChooser.getPlayLocation();
+        positionToPlay = new Position(result, getMinY(result, board));
+
+        if (board.isWithinBoard(positionToPlay)){
 
         TrashTalk.talkTrash();
         return result;
-    }
+        }
+        else{
 
-}
+            do {
+                Random rand = new Random();
+                result = rand.nextInt(board.getConfig().getWidth());
+                positionToPlay = new Position(result, getMinY(result, board));
+            }
+            while(!board.isWithinBoard(positionToPlay));
+        }
+        TrashTalk.talkTrash();
+        return result;
+    }
+        }
+

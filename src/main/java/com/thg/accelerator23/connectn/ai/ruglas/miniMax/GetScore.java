@@ -34,11 +34,11 @@ public class GetScore {
         totalScore = 0;
             totalScore += getScoreFromAdjPositions(positionToCheck, boardGame, counter, false);
             if (positionToCheck.getX() == 4 || positionToCheck.getX() == 5){
-                totalScore += 15;
+                totalScore += 10;
 //                System.out.println("Central column");
             }
             else if (positionToCheck.getX() == 3 || positionToCheck.getX() == 6){
-                totalScore += 10;
+                totalScore += 5;
 //                System.out.println("near-central column");
             }
             return totalScore;
@@ -119,13 +119,13 @@ public class GetScore {
             if(counterList.stream().filter(counter -> counter== playerCounter.getOther()).count() > 0) {return 0;}
             else{
                 long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
-                if(counterCount == 2){return 5;}
-                else if(counterCount == 3) {return 10;}
+                if(counterCount == 2){return 100;}
+                else if(counterCount == 3) {return 1000;}
                 else return 0;
             }
         }
    public int getHeightOfWinPositionFromLine(List<Position> positionList) {
-       System.out.println("getHeightOfWinPosition method call");
+//       System.out.println("getHeightOfWinPosition method call");
 
        int height = 100;
 
@@ -142,7 +142,7 @@ public class GetScore {
    public int getHeightScore(List<Position> positionList) {
 
        int score = 0;
-       System.out.println("getHeightScore method call");
+//       System.out.println("getHeightScore method call");
 
            int winPositionHeight = getHeightOfWinPositionFromLine(positionList);
 
@@ -150,7 +150,7 @@ public class GetScore {
 
            if (winPositionHeight % 2 == this.parity) {
                score = score + 10;
-               System.out.println("This Line of three is at a height matching the parity of the player :).");
+//               System.out.println("This Line of three is at a height matching the parity of the player :).");
            }
         return score;
    }

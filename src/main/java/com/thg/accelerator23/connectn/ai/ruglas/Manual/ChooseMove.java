@@ -28,7 +28,7 @@ public class ChooseMove {
         for (int column = 0; column < this.boardWidth; column++) {
             if (TestMove.isGameOverAfterMove(this.board, column, this.counter)) {
                 this.playLocation = column;
-                System.out.println("Win found");
+//                System.out.println("Win found");
             }
         }
     }
@@ -37,7 +37,7 @@ public class ChooseMove {
         for (int column = 0; column < this.boardWidth; column++) {
             if (TestMove.isGameOverAfterMove(this.board, column, this.opponentCounter)) {
                 this.playLocation = column;
-                System.out.println("blocking win");
+//                System.out.println("blocking win");
             }
         }
     }
@@ -58,7 +58,7 @@ public class ChooseMove {
                     if (positionScore > bestScore) {
                         bestScore = positionScore;
                         bestColumn = i;
-                        System.out.println("\n The best move is in column " + i + " which scores " + bestScore + " points");
+//                        System.out.println("\n The best move is in column " + i + " which scores " + bestScore + " points");
                     }
                 }
                 else {continue;}
@@ -83,7 +83,7 @@ public class ChooseMove {
                 return y;
             }
         }
-        throw new RuntimeException("no y is vacant");
+        return 100;
     }
 
 }

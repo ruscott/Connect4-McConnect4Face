@@ -1,22 +1,28 @@
 package com.thg.accelerator23.connectn.ai.ruglas.MCTS;
 
 import com.thehutgroup.accelerator.connectn.player.Board;
+import com.thehutgroup.accelerator.connectn.player.Counter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-private int visitCount;
-    Board board;
-    int nodeWins;
+private int visitCount=0;
+   private Board board;
+    private int nodeWins;
 
-    int column;
+   private int column;
     List<Node> children = new ArrayList<>();
     Node parent;
 
-    public Node(Board board, int column) {
+    boolean state;
+
+    Counter counter;
+
+    public Node(Board board, int column, Counter counter) {
         this.board = board;
         this.column = column;
+        this.counter = counter;
     }
 
     public Node getChildWithBestScore() {
@@ -50,5 +56,11 @@ private int visitCount;
 
     public void setParent(Node node) {
         this.parent = node;
+    }
+
+    public void setVisitCount(){this.visitCount += 1;};
+
+    public Counter getCounter() {
+        return counter;
     }
 }

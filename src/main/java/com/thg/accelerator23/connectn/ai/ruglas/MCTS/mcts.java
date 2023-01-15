@@ -4,6 +4,9 @@ import com.thehutgroup.accelerator.connectn.player.Board;
 import com.thehutgroup.accelerator.connectn.player.Counter;
 import com.thehutgroup.accelerator.connectn.player.InvalidMoveException;
 import com.thg.accelerator23.connectn.ai.ruglas.analysis.BoardAnalyser;
+import com.thg.accelerator23.connectn.ai.ruglas.analysis.GameState;
+
+import java.util.Random;
 
 public class mcts {
     private Board board;
@@ -12,10 +15,16 @@ public class mcts {
     private int computationsCounter;
     private int computations;
 
+    Board newBoard;
+
+    BoardAnalyser boardAnalyser;
+
+
     public mcts(Board board, Counter counter, int computations) {
         this.board = board;
         this.counter = counter;
         this.computations = computations;
+        this.boardAnalyser = new BoardAnalyser(board.getConfig());
     }
 
     public void mctsBestMove() {
@@ -53,8 +62,8 @@ private Node expandNodeRando(Node node) {
     for (int column = 0; column < node.getBoard().getConfig().getWidth(); column++) {
         //make move if available
         try {
-            Board boardWithMove = new Board(board, column, counter);
-            Node child = new Node(boardWithMove, column);
+            Board boardWithMove = new Board(board, column, node.getCounter().getOther());
+            Node child = new Node(boardWithMove, column, node.getCounter().getOther());
             child.setParent(node);
             result = child;
         } catch (InvalidMoveException e) {
@@ -62,40 +71,46 @@ private Node expandNodeRando(Node node) {
     }
     return result;}
 
-    private void simulatePlay(Node node){
+    private int simulatePlay(Node promisingNode){
+        newBoard = board;
         //While game in progress get random next move and make new node
-    }
+        promisingNode.parent.setVisitCount();
+        GameState gameState = boardAnalyser.calculateGameState(promisingNode.getBoard());
+        int column = 0;
+        Counter currentPlayer = promisingNode.getCounter();
+        while (!gameState.isEnd()){
+                try{
+                    Random rand = new Random();
+                    column = rand.nextInt(newBoard.getConfig().getWidth());
+                    newBoard = new Board(newBoard, column, currentPlayer);}
+                catch (InvalidMoveException e){
+                }
+                Node child = new Node(newBoard, column, currentPlayer);
+                child.setParent(promisingNode);
+                promisingNode.addChild(child);
+                gameState = boardAnalyser.calculateGameState(newBoard);
+                if (gameState.isEnd()) {
+                    if (gameState.getWinner() == counter){return 1;}
+                    else if (gameState.isDraw()) {return 0;}
+                    else return -1;
+                }
+            currentPlayer = currentPlayer.getOther();
+        }
 
+
+        return 0;
+    }
+    private void backProp(Counter counter, Node selectedNode) {
+        while (selectedNode != null) {
+            selectedNode.setVisitCount();
+        }
+    }
 
 }
 
 
 
-//    private int simulateLightPlayout(Node promisingNode) {
-//            Node node = new Node(promisingNode.board);
-//            node.parent = promisingNode.parent;
-//            int boardStatus = node.board.getStatus();
-//
-//            if (boardStatus == opponentId) {
-//                node.parent.score = Integer.MIN_VALUE;
-//                return node.board.getStatus();
-//            }
-//
-//            while (node.board.getStatus() == Board.GAME_IN_PROGRESS) {
-//                //game.ConnectFourBoard nextMove = node.board.getWinningMoveOrElseRandom();
-//                Board nextMove = node.board.getRandomLegalNextMove();
-//
-//                Node child = new Node(nextMove);
-//                child.parent = node;
-//                node.addChild(child);
-//
-//                node = child;
-//            }
-//
-//            return node.board.getStatus();
-//        }
-//
-//
+
 
 
 //        private void backPropagation(int playerNumber, Node selected) {

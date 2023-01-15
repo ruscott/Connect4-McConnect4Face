@@ -46,13 +46,13 @@ public class MiniMaxScoringAlphaBeta {
                     if (score > bestScore) {
                     bestScore = score;
                     this.bestColumn = xMax;
-                        System.out.println("bestcolumn " + xMax + " depth " + depth);
+//                        System.out.println("bestcolumn " + xMax + " depth " + depth);
                 }
 
                     alpha = Math.max(alpha, bestScore);
 
-//                    if (beta <= alpha) {
-//                         break;}
+                    if (beta <= alpha) {
+                         break;}
 
                 }}
       return bestScore; }
@@ -69,13 +69,13 @@ public class MiniMaxScoringAlphaBeta {
                if (score<bestScore){
                    this.bestColumn = xMin;
                bestScore = score;
-                   System.out.println("bestcolumn " + xMin + " depth " + depth);
+//                   System.out.println("bestcolumn " + xMin + " depth " + depth);
                }
                    beta = Math.min(beta, bestScore);
 
 //////
-//                   if (beta <= alpha) {
-//                       break;}
+                   if (beta <= alpha) {
+                       break;}
 
 
           }
