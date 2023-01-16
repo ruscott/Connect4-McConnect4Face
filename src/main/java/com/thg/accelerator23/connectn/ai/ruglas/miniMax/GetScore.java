@@ -29,6 +29,7 @@ public class GetScore {
         return getScoreFromAdjPositions(positionToCheck, counter, true);
     }
 
+
     public int getTotalScore(Position positionToCheck, Counter counter) throws InvalidMoveException {
         GameState gameState = boardAnalyser.calculateGameState(this.board);
         totalScore = 0;
@@ -40,11 +41,11 @@ public class GetScore {
 
             if (positionToCheck.getX() == 4 || positionToCheck.getX() == 5){
                 totalScore += 15;
-                System.out.println("Central column bonus points + 15");
+//                System.out.println("Central column bonus points + 15");
             }
             else if (positionToCheck.getX() == 3 || positionToCheck.getX() == 6){
                 totalScore += 5;
-                System.out.println("near-central column bonus points + 5 ");
+//                System.out.println("near-central column bonus points + 5 ");
             }
             return totalScore;
 //        }
@@ -118,10 +119,10 @@ public class GetScore {
             long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
 
             if(counterCount == 2){
-                System.out.println("Two in a row bonus points + 20 ");
+//                System.out.println("Two in a row bonus points + 20 ");
                 return 20;}
             else if(counterCount == 3) {
-                System.out.println("Three in a row bonus points + 40");
+//                System.out.println("Three in a row bonus points + 40");
                 return 40;}
             else return 5;
         }}
@@ -136,7 +137,7 @@ public class GetScore {
             }
         }
    public int getHeightOfWinPositionFromLine(List<Position> positionList) {
-       System.out.println("getHeightOfWinPosition method call");
+//       System.out.println("getHeightOfWinPosition method call");
 
        int height = 100;
 
@@ -153,7 +154,7 @@ public class GetScore {
    public int getHeightScore(List<Position> positionList) {
 
        int score = 0;
-       System.out.println("getHeightScore method call");
+//       System.out.println("getHeightScore method call");
 
            int winPositionHeight = getHeightOfWinPositionFromLine(positionList);
 
@@ -161,7 +162,7 @@ public class GetScore {
 
            if (winPositionHeight % 2 == this.parity) {
                score = score + 10;
-               System.out.println("This Line of three is at a height matching the parity of the player :).");
+//               System.out.println("This Line of three is at a height matching the parity of the player :).");
            }
         return score;
    }

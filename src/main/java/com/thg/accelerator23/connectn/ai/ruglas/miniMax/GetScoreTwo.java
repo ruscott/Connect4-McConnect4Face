@@ -1,6 +1,7 @@
 package com.thg.accelerator23.connectn.ai.ruglas.miniMax;
 
 import com.thehutgroup.accelerator.connectn.player.*;
+import com.thg.accelerator23.connectn.ai.ruglas.Manual.ChooseMove;
 import com.thg.accelerator23.connectn.ai.ruglas.analysis.BoardAnalyser;
 import com.thg.accelerator23.connectn.ai.ruglas.analysis.GameState;
 
@@ -22,22 +23,45 @@ public class GetScoreTwo {
         return totalScore;
     }
 
+    public static int getBestOpponentScore(Board board, Counter opponentCounter) throws InvalidMoveException {
+
+        int bestOpponentScore = 0;
+//        int bestColumn = 0;
+
+        for (int column = 0; column < board.getConfig().getWidth(); column++) {
+            Position positionToPlay = new Position(column, ChooseMove.getMinY(column, board));
+
+            if (board.isWithinBoard(positionToPlay)) {
+
+                int opponentPositionScore = GetScoreTwo.getTotalScore(board, positionToPlay, opponentCounter);
+
+                if (opponentPositionScore > bestOpponentScore) {
+                    bestOpponentScore = opponentPositionScore;
+//                    bestColumn = column;
+                }
+            }
+        }
+        return bestOpponentScore;
+    }
+
     private static int getScoreFromCenter(Position positionToCheck, Counter counter) {
 
         int centralScore = 0;
 
         if (positionToCheck.getX() == 4 || positionToCheck.getX() == 5){
             centralScore += Scores.centralScore;
-            System.out.println("Central column bonus points + " + Scores.centralScore);
+//            System.out.println(positionToCheck.getX() + "," + positionToCheck.getY());
+//            System.out.println("Central column bonus points + " + Scores.centralScore);
         }
         else if (positionToCheck.getX() == 3 || positionToCheck.getX() == 6){
             centralScore += Scores.nearCentralScore;
-            System.out.println("near-central column bonus points + " + Scores.nearCentralScore);
+//            System.out.println(positionToCheck.getX() + "," + positionToCheck.getY());
+//            System.out.println("near-central column bonus points + " + Scores.nearCentralScore);
         }
         return centralScore;
     }
 
-    private static int getScoreFromTwoOrThreeInALine(Board board, Position positionToCheck, Counter counter) {
+    static int getScoreFromTwoOrThreeInALine(Board board, Position positionToCheck, Counter counter) {
         int lineScore = 0;
 
         ArrayList<ArrayList<Position>> positionsArray = getAdjacentNPositions(board, positionToCheck, 4);
@@ -68,14 +92,14 @@ public class GetScoreTwo {
             long counterCount = counterList.stream().filter(counter -> counter== playerCounter).count();
 
             if(counterCount == 2) {
-                System.out.println("Two in a row bonus points + 20 ");
+//                System.out.println("Two in a row bonus points + 20 ");
                 return Scores.lineOfTwoScore;}
             else if(counterCount == 3) {
-                System.out.println("Three in a row bonus points + 40");
+//                System.out.println("Three in a row bonus points + 40");
                 return Scores.lineOfThreeScore;}
 
             else {
-                System.out.println("bonus points for no surrounding enemy counters + 5");
+//                System.out.println("bonus points for no surrounding enemy counters + "  + Scores.noSurroundingCountersScore);
                 return Scores.noSurroundingCountersScore;
             }
         }

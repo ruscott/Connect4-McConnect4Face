@@ -1,47 +1,45 @@
 package com.thg.accelerator23.connectn.ai.ruglas.Manual;
 
-import com.thehutgroup.accelerator.connectn.player.*;
+import com.thehutgroup.accelerator.connectn.player.Board;
+import com.thehutgroup.accelerator.connectn.player.Counter;
+import com.thehutgroup.accelerator.connectn.player.InvalidMoveException;
+import com.thehutgroup.accelerator.connectn.player.Player;
 
 import java.util.Random;
 
 public class RandomAI extends Player {
-    Counter opponentCounter;
 
-    public RandomAI(Counter counter) {
-        super(counter, com.thg.accelerator23.connectn.ai.ruglas.Connecty.class.getName());
+    Counter counter;
+    RandomAI(Counter pCounter) {
+        super(pCounter, com.thg.accelerator23.connectn.ai.ruglas.Connecty.class.getName());
     }
-
-    public int getMinY(int x, Board board) {
-        for (int y = 0; y < board.getConfig().getHeight(); y++) {
-            Position minYPosition = new Position(x, y);
-            if (!board.hasCounterAtPosition(minYPosition)) {
-                return y;
-            }
-        }
-        throw new RuntimeException("no y is vacant");
-    }
-
     @Override
     public int makeMove(Board board) {
 
         ChooseMove moveChooser = new ChooseMove(board, this.getCounter());
 
         try {
-            moveChooser.setBestMove();
+            moveChooser.findWinPosition();
         } catch (InvalidMoveException e) {
             throw new RuntimeException(e);
         }
+        if (moveChooser.playLocation != null) {
+            return moveChooser.playLocation;
+        } else {
+            try {
+                moveChooser.findBlockPosition();
+            } catch (InvalidMoveException e) {
+                throw new RuntimeException(e);
+            }
+            if (moveChooser.playLocation != null) {
+                return moveChooser.playLocation;
+            } else {
+                Random Rand = new Random();
 
-        int result;
-        Position positionToPlay;
+                int rand = Rand.nextInt(10);
 
-        do {
-            result = moveChooser.getPlayLocation();
-            positionToPlay = new Position(result, getMinY(result, board));
-        } while (!board.isWithinBoard(positionToPlay));
-
-        TrashTalk.talkTrash();
-        return result;
+                return rand;
+            }
+        }
     }
-
 }

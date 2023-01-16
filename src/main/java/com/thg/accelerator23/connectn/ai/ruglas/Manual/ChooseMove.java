@@ -15,7 +15,7 @@ public class ChooseMove {
     Counter opponentCounter;
     Integer playLocation;
 
-    ChooseMove(Board board, Counter counter) {
+    public ChooseMove(Board board, Counter counter) {
         this.board = board;
         this.counter = counter;
         this.opponentCounter = counter.getOther();
@@ -28,7 +28,7 @@ public class ChooseMove {
         for (int column = 0; column < this.boardWidth; column++) {
             if (TestMove.isGameOverAfterMove(this.board, column, this.counter)) {
                 this.playLocation = column;
-                System.out.println("Win found");
+//                System.out.println("Win found");
             }
         }
     }
@@ -37,7 +37,7 @@ public class ChooseMove {
         for (int column = 0; column < this.boardWidth; column++) {
             if (TestMove.isGameOverAfterMove(this.board, column, this.opponentCounter)) {
                 this.playLocation = column;
-                System.out.println("blocking win");
+//                System.out.println("blocking win");
             }
         }
     }
@@ -49,19 +49,35 @@ public class ChooseMove {
         }
 
         if (this.playLocation == null) {
-            int bestScore = 0;
+            int bestScore = -1000;
             int bestColumn = 0;
             for (int i=0; i<this.boardWidth; i++) {
+
                 Position positionToPlay = new Position(i,getMinY(i, this.board));
+
                 if (this.board.isWithinBoard(positionToPlay)) {
-                    int positionScore = GetScoreTwo.getTotalScore(board, positionToPlay, this.counter);
-                    if (positionScore > bestScore) {
-                        bestScore = positionScore;
+
+//                    System.out.println("\n Scoring for column" + i);
+
+                    int positionScore = GetScoreTwo.getTotalScore(this.board, positionToPlay, this.counter);
+
+                    Board boardAfterMove = new Board(this.board, i, this.counter );
+
+                    int opponentBestScore = GetScoreTwo.getBestOpponentScore(boardAfterMove, this.opponentCounter);
+
+//                    System.out.println("opponent's best score on next move would be " + opponentBestScore);
+
+                    int totalScore = positionScore - opponentBestScore;
+
+                    if (totalScore > bestScore) {
+                        bestScore = totalScore;
                         bestColumn = i;
-                        System.out.println("\n The best move is in column " + i + " which scores " + bestScore + " points");
+//                        System.out.println("\n The best move is in column " + i + " which scores " + bestScore + " points");
                     }
                 }
-                else {continue;}
+                else {
+//                    System.out.println("Can't move here");
+                    }
             }
             this.playLocation = bestColumn;
         }
@@ -75,15 +91,13 @@ public class ChooseMove {
     public Integer getPlayLocation() {
         return this.playLocation;
     }
-
-    public int getMinY(int x, Board board) {
+    public static int getMinY(int x, Board board) {
         for (int y = 0; y < board.getConfig().getHeight(); y++) {
             Position minYPosition = new Position(x, y);
             if (!board.hasCounterAtPosition(minYPosition)) {
                 return y;
             }
         }
-        throw new RuntimeException("no y is vacant");
+        return 1000;
     }
-
 }
